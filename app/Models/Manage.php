@@ -7,18 +7,16 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Notifications\VerifyEmail;
-use App\Notifications\ResetPassword;
-use App\Models\Event;
-use App\Models\ApplicationManagement;
+use App\Notifications\Admin\VerifyEmail;
+use App\Notifications\Admin\ResetPassword;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-class User extends Authenticatable implements MustVerifyEmail
+
+class Manage extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
     use softDeletes;
     use HasUuids;
-    
 
     /**
      * The attributes that are mass assignable.
@@ -56,17 +54,19 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
     /**
      * データの取得周り
      */
-    Public function getNameAttribute($value){
+    public function getNameAttribute($value)
+    {
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         return empty($value) ? null : openssl_decrypt($value, $aes_type, $aes_key);
     }
-    Public function getEmailAttribute($value){
+    public function getEmailAttribute($value)
+    {
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         return empty($value) ? null : openssl_decrypt($value, $aes_type, $aes_key);
@@ -97,14 +97,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPassword($token));
     }
-    /**
-     * Get all of the events for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function events()
-    {
-        return $this->hasMany(Event::class);
-    }
-
 }

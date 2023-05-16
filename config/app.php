@@ -59,6 +59,8 @@ return [
     'asset_url' => env('ASSET_URL', null),
 
     'frontend_url' => env('FRONTEND_URL', null),
+    'manage_url' => env('MANAGE_URL'),
+    'portal_url' => env('PORTAL_URL'),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -14,7 +14,7 @@ class ResetPassword extends Notification
      * @var string
      */
     public $token;
-    protected $title = 'ポータルサイトパスワードリセット 通知';
+    protected $title = 'パスワードリセット 通知';
 
     /**
      * The callback that should be used to create the reset password URL.
@@ -80,7 +80,7 @@ class ResetPassword extends Notification
             ->view(
                 'vendor.notifications.passwordReset',
                 [
-                    'reset_url' => config('app.portal_url') . '/reset-password/' . $this->token
+                    'reset_url' => config('app.manage_url') . '/reset-password/' . $this->token
                     // 'reset_url' => url('/portal/reset-password', $this->token),
                 ]
             );
@@ -98,7 +98,7 @@ class ResetPassword extends Notification
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
 
-        return url(route('password.reset', [
+        return url(route('manages.password.reset', [
             'token' => $this->token,
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));

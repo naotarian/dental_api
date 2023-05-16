@@ -14,7 +14,6 @@ class ResetPassword extends Notification
      * @var string
      */
     public $token;
-    protected $title = 'ポータルサイトパスワードリセット 通知';
 
     /**
      * The callback that should be used to create the reset password URL.
@@ -76,14 +75,11 @@ class ResetPassword extends Notification
     protected function buildMailMessage($url)
     {
         return (new MailMessage)
-            ->subject($this->title)
-            ->view(
-                'vendor.notifications.passwordReset',
-                [
-                    'reset_url' => config('app.portal_url') . '/reset-password/' . $this->token
-                    // 'reset_url' => url('/portal/reset-password', $this->token),
-                ]
-            );
+            ->subject(Lang::get('Reset Password Notification'))
+            ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
+            ->action(Lang::get('Reset Password'), $url)
+            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
     }
 
     /**

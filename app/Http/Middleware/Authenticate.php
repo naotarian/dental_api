@@ -15,7 +15,8 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login');
+            if(preg_match('/manages/', $request->path())) return route('manage_login');
+            return route('portal_login');
         }
     }
 }

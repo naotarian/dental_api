@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -51,6 +51,7 @@ class VerifyEmail extends Notification
         $docode_notifiable['name'] = $docode_notifiable['name'];
         $docode_notifiable = json_encode($docode_notifiable);
         $verificationUrl = $this->verificationUrl($docode_notifiable);
+        \Log::info($verificationUrl);
 
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $docode_notifiable, $verificationUrl);
@@ -85,10 +86,10 @@ class VerifyEmail extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
-// \Log::info($decode_notifiable['id']);
-// \Log::info(sha1($decode_notifiable['email']));
+        \Log::info($decode_notifiable['id']);
+        \Log::info(sha1($decode_notifiable['email']));
         return URL::temporarySignedRoute(
-            'verification.verify',
+            'manages.verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $decode_notifiable['id'],
