@@ -17,11 +17,6 @@ use App\Http\Controllers\UserController;
 Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::middleware(['auth:manages', 'verified'])->get('/admin/user', function (Request $request) {
-    \Log::info('rte');
+Route::middleware(['auth:manages', 'verified'])->get('/manage/user', function (Request $request) {
     return $request->user();
 });
-// Route::controller(UserController::class)->group(function () {
-//     Route::post('/user_info', 'user_info');
-//     Route::get('/my_page', 'my_page');
-// });

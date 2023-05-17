@@ -19,6 +19,6 @@ Route::redirect('/login', config('app.portal_url') . '/login')->name('portal_log
 Route::redirect('/adminLogin', config('app.frontend_url') . '/admin/login')->name('adminLogin');
 require __DIR__ . '/auth.php';
 Route::prefix('manages')->name('manages.')->group(function () {
-  require __DIR__ . '/admin.php';
+  require __DIR__ . '/manage.php';
 });
 

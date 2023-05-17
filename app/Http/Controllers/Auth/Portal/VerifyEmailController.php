@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth\Admin;
+namespace App\Http\Controllers\Auth\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -18,14 +18,15 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request)
     {
+        \Log::info('1234');
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(config('app.manage_url') . RouteServiceProvider::HOME . '?verified=1');
+            return redirect()->intended(config('app.portal_url').RouteServiceProvider::HOME.'?verified=1');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect()->intended(config('app.manage_url') . RouteServiceProvider::HOME . '?verified=1');
+        return redirect()->intended(config('app.portal_url').RouteServiceProvider::HOME.'?verified=1');
     }
 }
