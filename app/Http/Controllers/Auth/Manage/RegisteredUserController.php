@@ -27,7 +27,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::info($request->tel);
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         $datas = $request->all();
