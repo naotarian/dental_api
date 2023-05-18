@@ -18,14 +18,25 @@ class Manage extends Authenticatable implements MustVerifyEmail
     use softDeletes;
     use HasUuids;
 
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
+        'dental_name',
         'email',
+        'tel',
+        'last_name',
+        'first_name',
+        'last_name_kana',
+        'first_name_kana',
+        'post_number',
+        'address1',
+        'address2',
+        'address3',
+        'address4',
         'password',
     ];
 
@@ -59,17 +70,53 @@ class Manage extends Authenticatable implements MustVerifyEmail
     /**
      * データの取得周り
      */
-    public function getNameAttribute($value)
+    public function getDentalNameAttribute($value)
     {
-        $aes_key = config('app.aes_key');
-        $aes_type = config('app.aes_type');
-        return empty($value) ? null : openssl_decrypt($value, $aes_type, $aes_key);
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
     public function getEmailAttribute($value)
     {
-        $aes_key = config('app.aes_key');
-        $aes_type = config('app.aes_type');
-        return empty($value) ? null : openssl_decrypt($value, $aes_type, $aes_key);
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getLastNameAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFirstNameAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getLastNameKanaAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFirstNameKanaAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getTelAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getAddress1Attribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getAddress2Attribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getAddress3Attribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getAddress4Attribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getPostNumberAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
 
     // /**

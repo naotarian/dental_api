@@ -22,7 +22,7 @@ return [
     // 'allowed_origins' => [env('FRONTEND_URL')],
     'allowed_origins' => ['*'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['*'],
 
     'allowed_headers' => ['*'],
 

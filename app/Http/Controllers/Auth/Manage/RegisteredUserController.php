@@ -27,6 +27,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info($request->tel);
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         $datas = $request->all();
@@ -34,14 +35,14 @@ class RegisteredUserController extends Controller
         $datas['email_normal'] = $request->email;
         $rules = array();
         $messages = array();
-        $rules['name'] = ['required', 'string', 'max:255'];
+        $rules['dentalName'] = ['required', 'string', 'max:255'];
         $rules['email_normal'] = ['required', 'string', 'email:strict,dns,spoof', 'max:255'];
         $rules['email'] = ['unique:manages'];
         $rules['password'] = ['required', 'string', 'confirmed', 'min:8'];
         //name
-        $messages['name.max'] = '氏名は255文字以内で入力してください。';
-        $messages['name.required'] = '氏名は必須項目です。';
-        $messages['name.string'] = '氏名は文字列で入力してください。';
+        $messages['dentalName.max'] = '歯科医院名は255文字以内で入力してください。';
+        $messages['dentalName.required'] = '歯科医院名は必須項目です。';
+        $messages['dentalName.string'] = '歯科医院名は文字列で入力してください。';
         //email
         $messages['email_normal.string'] = 'メールアドレスは文字列で入力してください。';
         $messages['email_normal.required'] = 'メールアドレスは必須項目です。';
@@ -57,8 +58,18 @@ class RegisteredUserController extends Controller
             return response()->json($validator->messages());
         }
         $user = Manage::create([
-            'name' => openssl_encrypt($request->name, $aes_type, $aes_key),
+            'dental_name' => openssl_encrypt($request->dentalName, $aes_type, $aes_key),
             'email' => openssl_encrypt($request->email, $aes_type, $aes_key),
+            'tel' => openssl_encrypt($request->tel, $aes_type, $aes_key),
+            'last_name' => openssl_encrypt($request->lastName, $aes_type, $aes_key),
+            'first_name' => openssl_encrypt($request->firstName, $aes_type, $aes_key),
+            'last_name_kana' => openssl_encrypt($request->lastNameKana, $aes_type, $aes_key),
+            'first_name_kana' => openssl_encrypt($request->firstNameKana, $aes_type, $aes_key),
+            'post_number' => openssl_encrypt($request->postNumber, $aes_type, $aes_key),
+            'address1' => openssl_encrypt($request->address1, $aes_type, $aes_key),
+            'address2' => openssl_encrypt($request->address2, $aes_type, $aes_key),
+            'address3' => openssl_encrypt($request->address3, $aes_type, $aes_key),
+            'address4' => openssl_encrypt($request->address4, $aes_type, $aes_key),
             'password' => Hash::make($request->password),
         ]);
         Auth::guard('manages')->login($user);

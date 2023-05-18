@@ -48,7 +48,7 @@ class VerifyEmail extends Notification
         $aes_type = config('app.aes_type');
         $docode_notifiable = json_decode($notifiable, true);
         $docode_notifiable['email'] = $docode_notifiable['email'];
-        $docode_notifiable['name'] = $docode_notifiable['name'];
+        $docode_notifiable['dental_name'] = $docode_notifiable['dental_name'];
         $docode_notifiable = json_encode($docode_notifiable);
         $verificationUrl = $this->verificationUrl($docode_notifiable);
         \Log::info($verificationUrl);
