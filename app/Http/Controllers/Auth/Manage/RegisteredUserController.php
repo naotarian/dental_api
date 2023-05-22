@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+//Models
+use App\Models\Manage\BasicInformation;
 
 class RegisteredUserController extends Controller
 {
@@ -70,6 +72,10 @@ class RegisteredUserController extends Controller
             'address3' => openssl_encrypt($request->address3, $aes_type, $aes_key),
             'address4' => openssl_encrypt($request->address4, $aes_type, $aes_key),
             'password' => Hash::make($request->password),
+        ]);
+        $closed = BasicInformation::create([
+            'manage_id' => $user->id,
+            'closed' => config('app.closed_default'),
         ]);
         Auth::guard('manages')->login($user);
         event(new Registered($user));

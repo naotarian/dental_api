@@ -23,7 +23,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::info($request);
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         // $validator = $request->validate([
@@ -56,7 +55,6 @@ class RegisteredUserController extends Controller
         $messages['password.min'] = 'パスワードは最低8文字で設定してください。';
         $validator = Validator::make($datas, $rules, $messages);
         if ($validator->fails()) {
-            \Log::info(gettype($validator->errors()));
             return response()->json($validator->messages());
         }
         Auth::login($user = User::create([

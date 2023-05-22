@@ -22,7 +22,6 @@ class NewPasswordController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::info($request);
         $aes_key = config('app.aes_key');
         $aes_type = config('app.aes_type');
         $request->validate([

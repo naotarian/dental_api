@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\Manage\NewPasswordController;
 use App\Http\Controllers\Auth\Manage\PasswordResetLinkController;
 use App\Http\Controllers\Auth\Manage\RegisteredUserController;
 use App\Http\Controllers\Auth\Manage\VerifyEmailController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
