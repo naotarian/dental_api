@@ -16,22 +16,25 @@ class BasicInformationController extends Controller
         $manage_id = Auth::id();
         //休診情報のレコード取得
         $basic_information = BasicInformation::where('manage_id', $manage_id)->first();
-        $content = ['basic_information' => $basic_information];
-        return response()->json($content);
+        $contents = ['basic_information' => $basic_information];
+        return response()->json($contents);
     }
     public function update(Request $request)
     {
         //ユーザーID取得
         $manage_id = Auth::id();
         //休診情報のレコード取得
-        $closed = BasicInformation::where('manage_id', $manage_id)->first();
+        $basic_information = BasicInformation::where('manage_id', $manage_id)->first();
         //レコードなければ作成
-        if (!$closed) $closed = new BasicInformation();
-        $closed['closed'] = $request->closed;
-        $closed['business_start'] = $request->businessStart;
-        $closed['business_end'] = $request->businessEnd;
-        $closed['manage_id'] = $manage_id;
+        if (!$basic_information) $basic_information = new BasicInformation();
+        $basic_information['closed'] = $request->closed;
+        $basic_information['business_start'] = $request->businessStart;
+        $basic_information['business_end'] = $request->businessEnd;
+        $basic_information['manage_id'] = $manage_id;
         //変更あれば保存
-        if ($closed->isDirty()) $closed->save();
+        $is_change = $basic_information->isDirty();
+        if ($is_change) $basic_information->save();
+        $contents = ['is_change' => $is_change];
+        return response()->json($contents);
     }
 }
