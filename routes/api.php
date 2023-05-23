@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Manage\BasicInformationController;
 use App\Http\Controllers\Manage\AccessController;
+use App\Http\Controllers\Manage\MedicalTreatmentController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,14 @@ Route::middleware(['auth:manages', 'verified'])->controller(AccessController::cl
             Route::post('/company_change', 'company_change')->name('access.company_change');
             Route::post('/line_change', 'line_change')->name('access.line_change');
             Route::post('/update', 'update')->name('access.update');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(MedicalTreatmentController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('medical_treatment')->group(function () {
+            Route::get('/', 'fetch')->name('medical_treatment.fetch');
+            Route::post('/update', 'update')->name('medical_treatment.update');
         });
     });
 });
