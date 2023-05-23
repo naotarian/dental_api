@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Manage\BasicInformationController;
+use App\Http\Controllers\Manage\AccessController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,19 @@ Route::middleware(['auth:manages', 'verified'])->controller(BasicInformationCont
         Route::prefix('basic_information')->group(function () {
             Route::post('/update', 'update')->name('basic_information.update');
             Route::get('/', 'fetch')->name('basic_information.fetch');
+        });
+        Route::prefix('access')->group(function () {
+            Route::get('/', 'fetch')->name('access.fetch');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(AccessController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('access')->group(function () {
+            Route::get('/', 'fetch')->name('access.fetch');
+            Route::post('/company_change', 'company_change')->name('access.company_change');
+            Route::post('/line_change', 'line_change')->name('access.line_change');
+            Route::post('/update', 'update')->name('access.update');
         });
     });
 });

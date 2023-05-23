@@ -13,5 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // $this->call(StationCompanySeeder::class);
+        // $this->call(StationLineSeeder::class);
+        // $this->call(StationSeeder::class);
+        $this->call(MedicalParentCategorySeeder::class);
+        $this->call(MedicalChildrenCategorySeeder::class);
     }
 }
