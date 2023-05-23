@@ -144,4 +144,10 @@ class Manage extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPassword($token));
     }
+
+
+    public function treatments()
+    {
+        return $this->belongsToMany(MedicalChildrenCategory::class)->withTimestamps();
+    }
 }

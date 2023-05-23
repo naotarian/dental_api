@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class MedicalChildrenCategory extends Model
 {
     use HasFactory;
+    public function manages()
+    {
+        return $this->belongsToMany(Manage::class)->withTimestamps();
+    }
 }
