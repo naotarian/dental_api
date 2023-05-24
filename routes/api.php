@@ -59,6 +59,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(StaffController::cla
         Route::prefix('staff')->group(function () {
             Route::get('/', 'fetch')->name('staff.fetch');
             Route::post('/regist', 'regist')->name('staff.regist');
+            Route::post('/delete', 'delete')->name('staff.delete');
         });
     });
 });

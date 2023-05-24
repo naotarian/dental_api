@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('manage_id')->comment('所属医院ID');
+            $table->integer('staff_number')->comment('社員番号');
             $table->string('last_name')->comment('姓');
             $table->string('first_name')->comment('名');
             $table->string('last_name_kana')->comment('姓(カナ)');
