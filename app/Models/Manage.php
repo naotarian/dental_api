@@ -119,6 +119,7 @@ class Manage extends Authenticatable implements MustVerifyEmail
         return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
 
+
     // /**
     //  * データの保存周り
     //  */
@@ -150,8 +151,9 @@ class Manage extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(MedicalChildrenCategory::class)->withTimestamps();
     }
-    public function medical_treatments() {
+    public function medical_treatments()
+    {
         return $this->belongsToMany(MedicalChildrenCategory::class)
-                         ->withPivot('medical_children_category_id');
+            ->withPivot('medical_children_category_id');
     }
 }

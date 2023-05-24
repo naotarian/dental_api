@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Manage\BasicInformationController;
 use App\Http\Controllers\Manage\AccessController;
 use App\Http\Controllers\Manage\MedicalTreatmentController;
+use App\Http\Controllers\Manage\StaffController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,14 @@ Route::middleware(['auth:manages', 'verified'])->controller(MedicalTreatmentCont
         Route::prefix('medical_treatment')->group(function () {
             Route::get('/', 'fetch')->name('medical_treatment.fetch');
             Route::post('/update', 'update')->name('medical_treatment.update');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(StaffController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('staff')->group(function () {
+            Route::get('/', 'fetch')->name('staff.fetch');
+            Route::post('/regist', 'regist')->name('staff.regist');
         });
     });
 });
