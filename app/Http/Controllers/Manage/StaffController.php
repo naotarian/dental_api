@@ -9,6 +9,9 @@ use App\Models\StaffColor;
 use App\Models\Staff;
 use App\Models\MedicalChildrenCategory;
 use App\Models\ManageMedicalChildrenCategory;
+//Services
+use App\Http\Service\Manage\Staff\Regist;
+use App\Http\Service\Manage\Staff\Delete;
 
 class StaffController extends Controller
 {
@@ -18,34 +21,16 @@ class StaffController extends Controller
         return response()->json($content);
     }
 
-    public function regist(Request $request)
+    public function regist(Regist $regist, Request $request)
     {
-        //ユーザーID取得
-        $manage_id = Auth::id();
-        $target = $request['staffId'] ? Staff::find($request['staffId']) : new Staff();
-        $target->manage_id = $manage_id;
-        $target->staff_number = $request['staffNumber'];
-        $target->last_name = $request['lastName'];
-        $target->first_name = $request['firstName'];
-        $target->last_name_kana = $request['lastNameKana'];
-        $target->first_name_kana = $request['firstNameKana'];
-        $target->nick_name = $request['nickName'];
-        $target->gender = $request['gender'];
-        $target->color_id = $request['staffColor'];
-        $target->display_order = $request['displayOrder'];
-        $target->priority = $request['priority'];
-        $target->save();
-
-        $target->treatments()->sync($request['treatCheckList']);
+        $registed = $regist($request);
         $content = $this->__fetchInitial();
         return response()->json($content);
     }
 
-    public function delete(Request $request)
+    public function delete(Delete $delete, Request $request)
     {
-        $target = Staff::find($request['id']);
-        $target->treatments()->sync([]);
-        $target->delete();
+        $deleted = $delete($request);
         $content = $this->__fetchInitial();
         return response()->json($content);
     }

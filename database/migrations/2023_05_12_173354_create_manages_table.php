@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('last_name_kana')->comment('代表者姓(フリガナ)');
             $table->string('first_name_kana')->comment('代表者名(フリガナ)');
             $table->string('post_number')->comment('郵便番号');
+            $table->integer('prefecture_number')->nullable()->comment('都道府県番号');
             $table->string('address1')->comment('都道府県');
             $table->string('address2')->comment('市町村区');
             $table->string('address3')->comment('町域');
