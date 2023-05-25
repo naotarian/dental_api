@@ -452,6 +452,15 @@ return [
                 'afternoon_end' => null,
             ],
         ],
+        ['holiday' => [
+            'is_closed' => false,
+            'is_morning' => false,
+            'is_afternoon' => false,
+            'morning_start' => null,
+            'morning_end' => null,
+            'afternoon_start' => null,
+            'afternoon_end' => null,
+        ]]
     ],
 
     /*

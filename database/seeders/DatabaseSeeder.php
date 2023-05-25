@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::table('staff_colors')->truncate();
-        // $this->call(StationCompanySeeder::class);
-        // $this->call(StationLineSeeder::class);
-        // $this->call(StationSeeder::class);
-        // $this->call(MedicalParentCategorySeeder::class);
-        // $this->call(MedicalChildrenCategorySeeder::class);
+        $this->call(StationCompanySeeder::class);
+        $this->call(StationLineSeeder::class);
+        $this->call(StationSeeder::class);
+        $this->call(MedicalParentCategorySeeder::class);
+        $this->call(MedicalChildrenCategorySeeder::class);
         $this->call(StaffColorSeeder::class);
         // $this->call([
         //     StationCompanySeeder::class,

@@ -14,4 +14,8 @@ class MedicalChildrenCategory extends Model
     {
         return $this->belongsToMany(Manage::class)->withTimestamps();
     }
+    public function staffs()
+    {
+        return $this->belongsToMany(Staff::class)->withTimestamps();
+    }
 }

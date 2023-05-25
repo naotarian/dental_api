@@ -15,8 +15,10 @@ class BasicInformationController extends Controller
         //ユーザーID取得
         $manage_id = Auth::id();
         //休診情報のレコード取得
-        $basic_information = BasicInformation::where('manage_id', $manage_id)->first();
-        $contents = ['basic_information' => $basic_information];
+        $basic_information = BasicInformation::where('manage_id', $manage_id)->first()->toArray();
+        $holiday = $basic_information['closed'][6];
+        unset($basic_information['closed'][6]);
+        $contents = ['basic_information' => $basic_information, 'holiday' => $holiday];
         return response()->json($contents);
     }
     public function update(Request $request)
@@ -28,6 +30,9 @@ class BasicInformationController extends Controller
         //レコードなければ作成
         if (!$basic_information) $basic_information = new BasicInformation();
         $basic_information['closed'] = $request->closed;
+        $tmp = $basic_information['closed'];
+        $tmp[6]['holiday'] = $request->holiday;
+        $basic_information['closed'] = $tmp;
         $basic_information['business_start'] = $request->businessStart;
         $basic_information['business_end'] = $request->businessEnd;
         $basic_information['manage_id'] = $manage_id;

@@ -67,4 +67,13 @@ class Staff extends Model
     {
         $this->attributes['nick_name'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
+    public function treatments()
+    {
+        return $this->belongsToMany(MedicalChildrenCategory::class)->withTimestamps();
+    }
+    public function medical_treatments()
+    {
+        return $this->belongsToMany(MedicalChildrenCategory::class)
+            ->withPivot('medical_children_category_id');
+    }
 }
