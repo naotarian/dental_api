@@ -7,6 +7,7 @@ use App\Http\Controllers\Manage\BasicInformationController;
 use App\Http\Controllers\Manage\AccessController;
 use App\Http\Controllers\Manage\MedicalTreatmentController;
 use App\Http\Controllers\Manage\StaffController;
+use App\Http\Controllers\Manage\ShiftController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,13 @@ Route::middleware(['auth:manages', 'verified'])->controller(StaffController::cla
             Route::get('/', 'fetch')->name('staff.fetch');
             Route::post('/regist', 'regist')->name('staff.regist');
             Route::post('/delete', 'delete')->name('staff.delete');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(ShiftController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('shift')->group(function () {
+            Route::get('/', 'fetch')->name('shift.fetch');
         });
     });
 });
