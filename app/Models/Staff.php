@@ -76,4 +76,8 @@ class Staff extends Model
         return $this->belongsToMany(MedicalChildrenCategory::class)
             ->withPivot('medical_children_category_id');
     }
+    public function shifts()
+    {
+        return $this->hasMany(Shift::class);
+    }
 }

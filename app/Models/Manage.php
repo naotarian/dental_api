@@ -156,4 +156,8 @@ class Manage extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(MedicalChildrenCategory::class)
             ->withPivot('medical_children_category_id');
     }
+    public function staff()
+    {
+        return $this->hasMany(Staff::class);
+    }
 }

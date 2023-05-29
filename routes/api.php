@@ -67,7 +67,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(StaffController::cla
 Route::middleware(['auth:manages', 'verified'])->controller(ShiftController::class)->group(function () {
     Route::prefix('manages')->group(function () {
         Route::prefix('shift')->group(function () {
-            Route::get('/', 'fetch')->name('shift.fetch');
+            Route::get('/{date?}', 'fetch')->name('shift.fetch');
         });
     });
 });
