@@ -68,6 +68,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ShiftController::cla
     Route::prefix('manages')->group(function () {
         Route::prefix('shift')->group(function () {
             Route::get('/{date?}', 'fetch')->name('shift.fetch');
+            Route::post('/update', 'update')->name('shift.update');
         });
     });
 });
