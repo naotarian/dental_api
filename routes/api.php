@@ -2,12 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Manage\BasicInformationController;
 use App\Http\Controllers\Manage\AccessController;
 use App\Http\Controllers\Manage\MedicalTreatmentController;
 use App\Http\Controllers\Manage\StaffController;
 use App\Http\Controllers\Manage\ShiftController;
+use App\Http\Controllers\Manage\UnitController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +70,15 @@ Route::middleware(['auth:manages', 'verified'])->controller(ShiftController::cla
             Route::get('/{date?}', 'fetch')->name('shift.fetch');
             Route::post('/update', 'update')->name('shift.update');
             Route::post('/delete', 'delete')->name('shift.delete');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(UnitController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('unit')->group(function () {
+            Route::get('/', 'fetch')->name('unit.fetch');
+            Route::post('/update', 'update')->name('unit.update');
+            Route::post('/delete', 'delete')->name('unit.delete');
         });
     });
 });
