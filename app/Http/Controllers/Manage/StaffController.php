@@ -23,14 +23,14 @@ class StaffController extends Controller
 
     public function regist(Regist $regist, Request $request)
     {
-        $registed = $regist($request);
+        $regist($request);
         $content = $this->__fetchInitial();
         return response()->json($content);
     }
 
     public function delete(Delete $delete, Request $request)
     {
-        $deleted = $delete($request);
+        $delete($request);
         $content = $this->__fetchInitial();
         return response()->json($content);
     }

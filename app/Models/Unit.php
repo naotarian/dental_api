@@ -20,4 +20,13 @@ class Unit extends Model
         'priority',
         'status'
     ];
+    public function medical_treatments()
+    {
+        return $this->belongsToMany(MedicalChildrenCategory::class)
+            ->withPivot('medical_children_category_id');
+    }
+    public function treatments()
+    {
+        return $this->belongsToMany(MedicalChildrenCategory::class)->withTimestamps();
+    }
 }
