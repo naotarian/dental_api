@@ -9,6 +9,7 @@ use App\Http\Controllers\Manage\StaffController;
 use App\Http\Controllers\Manage\ShiftController;
 use App\Http\Controllers\Manage\UnitController;
 use App\Http\Controllers\Portal\DentalListController;
+use App\Http\Controllers\Portal\ReserveController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -84,12 +85,19 @@ Route::middleware(['auth:manages', 'verified'])->controller(UnitController::clas
     });
 });
 
-
+//Portal
 Route::controller(DentalListController::class)->group(function () {
     Route::prefix('portal')->group(function () {
         Route::prefix('dental')->group(function () {
             Route::get('/', 'fetch')->name('dental.fetch');
             Route::post('/detail', 'detail')->name('dental.detail');
+        });
+    });
+});
+Route::controller(ReserveController::class)->group(function () {
+    Route::prefix('portal')->group(function () {
+        Route::prefix('reserve')->group(function () {
+            Route::post('/calendar', 'calendar')->name('reserve.calendar');
         });
     });
 });

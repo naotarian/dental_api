@@ -11,6 +11,7 @@ use App\Notifications\Admin\VerifyEmail;
 use App\Notifications\Admin\ResetPassword;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\Manage\BasicInformation;
 
 class Manage extends Authenticatable implements MustVerifyEmail
 {
@@ -163,5 +164,9 @@ class Manage extends Authenticatable implements MustVerifyEmail
     public function selected_station()
     {
         return $this->hasOne(SelectedStation::class);
+    }
+    public function basic_information()
+    {
+        return $this->hasOne(BasicInformation::class);
     }
 }
