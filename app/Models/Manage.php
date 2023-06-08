@@ -160,4 +160,8 @@ class Manage extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Staff::class);
     }
+    public function selected_station()
+    {
+        return $this->hasOne(SelectedStation::class);
+    }
 }

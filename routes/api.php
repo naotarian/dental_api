@@ -89,6 +89,7 @@ Route::controller(DentalListController::class)->group(function () {
     Route::prefix('portal')->group(function () {
         Route::prefix('dental')->group(function () {
             Route::get('/', 'fetch')->name('dental.fetch');
+            Route::post('/detail', 'detail')->name('dental.detail');
         });
     });
 });
