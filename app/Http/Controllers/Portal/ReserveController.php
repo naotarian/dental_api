@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Region;
 use App\Models\Manage;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -12,17 +11,19 @@ use App\Http\Controllers\CommonController;
 
 class ReserveController extends Controller
 {
-    public function calendar(CommonController $common, Request $request) {
+    public function calendar(CommonController $common, Request $request)
+    {
         $id = $request['id'];
         $dental = Manage::where('id', $id)->with('basic_information')->with('selected_station')->with('treatments')->first();
         //本日の日付取得
         $today = Carbon::today()->toDateString();
         //カレンダーに表示する最低月
         $min_date = Carbon::today()->format('Y年n月');
+        $max_date = Carbon::today()->addMonths('3')->format('Y年n月');
         //カレンダーの日付作成
         //当月の初日を取得
         $base_date = Carbon::now();
-        if($request->has('ym')) $base_date = new Carbon($request['ym']);
+        if ($request->has('ym')) $base_date = new Carbon($request['ym']);
         $target_first = $base_date->copy()->startOfMonth();
         //当月の最終日を取得
         $target_last = $base_date->copy()->endOfMonth();
@@ -49,9 +50,10 @@ class ReserveController extends Controller
         foreach ($dates as $date) {
             //表示用の形式にフォーマット
             $dates_format[$date->format('Y/m/d')]['date'] = $date->format('n/j');
+            $dates_format[$date->format('Y/m/d')]['day'] = $date->isoFormat('YYYY年MM月DD日(ddd)');
             //過去フラグセット
             $dates_format[$date->format('Y/m/d')]['is_past'] = false;
-            if($date->toDateString() < $today) $dates_format[$date->format('Y/m/d')]['is_past'] = true;
+            if ($date->toDateString() < $today) $dates_format[$date->format('Y/m/d')]['is_past'] = true;
             //曜日番号を取得
             $dow = $date->dayOfWeekIso;
             //曜日セット
@@ -65,18 +67,24 @@ class ReserveController extends Controller
             //祝日フラグセット
             $dates_format[$date->format('Y/m/d')]['is_holiday'] = $is_holiday;
             //医院の祝日設定が休診かつ該当日が祝日の場合は休診フラグの上書き
-            if($is_holiday && $closed[6]['holiday']['is_closed']) $is_closed = true;
+            if ($is_holiday && $closed[6]['holiday']['is_closed']) $is_closed = true;
             //休診フラグセット
             $dates_format[$date->format('Y/m/d')]['is_closed'] = $is_closed;
             //曜日、祝日によって文字色セット
             $dates_format[$date->format('Y/m/d')]['color'] = '#333';
-            if($dow === 6) $dates_format[$date->format('Y/m/d')]['color'] = '#1e90ff';
-            if($dow === 7) $dates_format[$date->format('Y/m/d')]['color'] = '#ff0000';
-            if($is_holiday) $dates_format[$date->format('Y/m/d')]['color'] = '#ff0000';
+            if ($dow === 6) $dates_format[$date->format('Y/m/d')]['color'] = '#1e90ff';
+            if ($dow === 7) $dates_format[$date->format('Y/m/d')]['color'] = '#ff0000';
+            if ($is_holiday) $dates_format[$date->format('Y/m/d')]['color'] = '#ff0000';
         }
         //配列を7つ(週ごと)で区切る
         $split_dates = array_chunk($dates_format, 7);
-        $contents = ['dates' => $split_dates, 'display_ym' => $display_ym, 'next_date' => $next_date, 'prev_date' => $prev_date, 'min_date' => $min_date];
+        //診療時間を作成
+        //予約可能な時間帯を配列にする
+        $business_start = $dental['basic_information']['business_start'];
+        $business_end = $dental['basic_information']['business_end'];
+        $date_list = $common->is_reserve_day_list($business_start, $business_end);
+
+        $contents = ['dates' => $split_dates, 'display_ym' => $display_ym, 'next_date' => $next_date, 'prev_date' => $prev_date, 'min_date' => $min_date, 'max_date' => $max_date, 'date_list' => $date_list];
         return response()->json($contents);
     }
 }
