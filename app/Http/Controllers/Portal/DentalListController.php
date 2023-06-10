@@ -14,7 +14,9 @@ class DentalListController extends Controller
 {
     public function fetch()
     {
-        $dentals = Manage::with('selected_station')->get();
+        $dentals = Manage::withWhereHas('basic_information', function($query) {
+            $query->whereNotNull('business_start')->whereNotNull('business_end');
+        })->with('selected_station')->get();
         $regions = Region::with('prefectures')->get();
         $contents = ['regions' => $regions, 'dentals' => $dentals];
         return response()->json($contents);
