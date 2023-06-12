@@ -8,6 +8,8 @@ use App\Models\Manage;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Http\Controllers\CommonController;
+//Requests
+use App\Http\Requests\Portal\Reserve\RegistRequest;
 
 class ReserveController extends Controller
 {
@@ -86,5 +88,11 @@ class ReserveController extends Controller
 
         $contents = ['dates' => $split_dates, 'display_ym' => $display_ym, 'next_date' => $next_date, 'prev_date' => $prev_date, 'min_date' => $min_date, 'max_date' => $max_date, 'date_list' => $date_list];
         return response()->json($contents);
+    }
+
+    public function regist(RegistRequest $request)
+    {
+        \Log::info($request);
+        return response()->json(['res' => 'ok']);
     }
 }
