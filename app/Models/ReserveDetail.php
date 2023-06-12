@@ -4,8 +4,52 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class ReserveDetail extends Model
 {
     use HasFactory;
+    use softDeletes;
+    use HasUuids;
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['first_name'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setLastNameKanaAttribute($value)
+    {
+        $this->attributes['last_name_kana'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setFirstNameKanaAttribute($value)
+    {
+        $this->attributes['first_name_kana'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setFullNameAttribute($value)
+    {
+        $this->attributes['full_name'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setFullNameKanaAttribute($value)
+    {
+        $this->attributes['full_name_kana'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setMobileTelAttribute($value)
+    {
+        $this->attributes['mobile_tel'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setFixedTelAttribute($value)
+    {
+        $this->attributes['fixed_tel'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function setBirthAttribute($value)
+    {
+        $this->attributes['birth'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
 }

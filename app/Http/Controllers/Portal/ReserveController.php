@@ -8,6 +8,11 @@ use App\Models\Manage;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Http\Controllers\CommonController;
+use App\Models\Reserve;
+use App\Models\ReserveDetail;
+use App\Models\User;
+use App\Models\Staff;
+use App\Models\Unit;
 //Requests
 use App\Http\Requests\Portal\Reserve\RegistRequest;
 
@@ -53,6 +58,7 @@ class ReserveController extends Controller
             //表示用の形式にフォーマット
             $dates_format[$date->format('Y/m/d')]['date'] = $date->format('n/j');
             $dates_format[$date->format('Y/m/d')]['day'] = $date->isoFormat('YYYY年MM月DD日(ddd)');
+            $dates_format[$date->format('Y/m/d')]['day_ymd'] = $date->format('Y-m-d');
             //過去フラグセット
             $dates_format[$date->format('Y/m/d')]['is_past'] = false;
             if ($date->toDateString() < $today) $dates_format[$date->format('Y/m/d')]['is_past'] = true;
@@ -92,7 +98,38 @@ class ReserveController extends Controller
 
     public function regist(RegistRequest $request)
     {
-        \Log::info($request);
+        $staff = Staff::where('manage_id', $request['manageId'])->first();
+        $unit = Unit::where('manage_id', $request['manageId'])->first();
+        $reserve = new Reserve;
+        $user = $request->user();
+        $user_id = $user ? $user['id'] : User::where('is_guest', true)->first()['id'];
+        $reserve['user_id'] = $user_id;
+        $reserve['manage_id'] = $request['manageId'];
+        $reserve['staff_id'] = $staff['id'];
+        $reserve['unit_id'] = $unit['id'];
+        $reserve['reserve_date'] = $request['reserveDayYmd'];
+        $reserve['start_time'] = $request['reserveTime'];
+        $reserve['end_time'] = $request['reserveTime'];
+        $reserve->save();
+        $reserve_detail = new ReserveDetail;
+        $reserve_detail['reserve_id'] = $reserve['id'];
+        $reserve_detail['color_id'] = 1;
+        $reserve_detail['category_id'] = $request['medicalHopeId'];
+        $reserve_detail['last_name'] = $request['lastName'];
+        $reserve_detail['first_name'] = $request['firstName'];
+        $reserve_detail['last_name_kana'] = $request['lastNameKana'];
+        $reserve_detail['first_name_kana'] = $request['firstNameKana'];
+        $reserve_detail['full_name'] = $request['lastName'] . $request['firstName'];
+        $reserve_detail['full_name_kana'] = $request['lastNameKana'] . $request['firstNameKana'];
+        $reserve_detail['gender'] = $request['sex'] === 'women' ? 1 : 2;
+        $reserve_detail['email'] = $request['email'];
+        $reserve_detail['mobile_tel'] = $request['mobile'];
+        $reserve_detail['fixed_tel'] = $request['fixed'];
+        $reserve_detail['remark'] = $request['remark'];
+        $reserve_detail['examination'] = $request['examination'] === 'new' ? 1 : 2;
+        $reserve_detail['birth'] = $request['year'] . '-' . $request['month'] . '-' . $request['day'];
+        $reserve_detail->save();
+        //メール処理
         return response()->json(['res' => 'ok']);
     }
 }
