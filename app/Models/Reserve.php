@@ -12,4 +12,8 @@ class Reserve extends Model
     use HasFactory;
     use softDeletes;
     use HasUuids;
+    public function detail()
+    {
+        return $this->hasOne(ReserveDetail::class);
+    }
 }

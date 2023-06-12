@@ -52,4 +52,45 @@ class ReserveDetail extends Model
     {
         $this->attributes['birth'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
+
+    public function getLastNameAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getLastNameKanaAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFirstNameAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFirstNameKanaAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFullNameAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFullNameKanaAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getMobileTelAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getFixedTelAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getEmailAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
+    public function getBirthAttribute($value)
+    {
+        return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
+    }
 }

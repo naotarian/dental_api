@@ -10,6 +10,7 @@ use App\Http\Controllers\Manage\ShiftController;
 use App\Http\Controllers\Manage\UnitController;
 use App\Http\Controllers\Portal\DentalListController;
 use App\Http\Controllers\Portal\ReserveController;
+use App\Http\Controllers\Manage\ReserveController as ManageReserve;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,14 @@ Route::middleware(['auth:manages', 'verified'])->controller(UnitController::clas
             Route::get('/', 'fetch')->name('unit.fetch');
             Route::post('/update', 'update')->name('unit.update');
             Route::post('/delete', 'delete')->name('unit.delete');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(ManageReserve::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('reserve')->group(function () {
+            Route::get('/list', 'list')->name('reserve.list');
+            Route::post('/detail', 'detail')->name('reserve.detail');
         });
     });
 });
