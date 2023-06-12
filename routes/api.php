@@ -90,6 +90,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ManageReserve::class
         Route::prefix('reserve')->group(function () {
             Route::get('/list', 'list')->name('reserve.list');
             Route::post('/detail', 'detail')->name('reserve.detail');
+            Route::post('/listSearch', 'listSearch')->name('reserve.listSearch');
         });
     });
 });

@@ -16,4 +16,12 @@ class Reserve extends Model
     {
         return $this->hasOne(ReserveDetail::class);
     }
+    public function staff()
+    {
+        return $this->hasOne(Staff::class, 'id', 'staff_id');
+    }
+    public function unit()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
+    }
 }

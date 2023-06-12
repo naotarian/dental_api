@@ -93,4 +93,9 @@ class ReserveDetail extends Model
     {
         return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
+
+    public function category()
+    {
+        return $this->hasOne(MedicalChildrenCategory::class, 'id', 'category_id');
+    }
 }
