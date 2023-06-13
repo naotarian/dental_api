@@ -12,6 +12,23 @@ class ReserveDetail extends Model
     use HasFactory;
     use softDeletes;
     use HasUuids;
+    protected $fillable = [
+        'color_id',
+        'category_id',
+        'last_name',
+        'first_name',
+        'full_name',
+        'last_name_kana',
+        'first_name_kana',
+        'full_name_kana',
+        'gender',
+        'mobile_tel',
+        'fixed_tel',
+        'email',
+        'birth',
+        'examination',
+        'remark',
+    ];
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = empty($value) ? null : openssl_encrypt($value, config('app.aes_type'), config('app.aes_key'));

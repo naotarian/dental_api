@@ -91,6 +91,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ManageReserve::class
             Route::get('/list', 'list')->name('reserve.list');
             Route::post('/detail', 'detail')->name('reserve.detail');
             Route::post('/listSearch', 'listSearch')->name('reserve.listSearch');
+            Route::post('/update', 'update')->name('reserve.update');
         });
     });
 });
@@ -100,6 +101,7 @@ Route::controller(DentalListController::class)->group(function () {
     Route::prefix('portal')->group(function () {
         Route::prefix('dental')->group(function () {
             Route::get('/', 'fetch')->name('dental.fetch');
+            Route::post('/', 'fetch')->name('dental.fetch');
             Route::post('/detail', 'detail')->name('dental.detail');
         });
     });

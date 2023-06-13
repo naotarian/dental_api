@@ -39,6 +39,7 @@ class Manage extends Authenticatable implements MustVerifyEmail
         'address3',
         'address4',
         'password',
+        'prefecture_number'
     ];
 
     /**

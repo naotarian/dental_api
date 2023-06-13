@@ -58,6 +58,7 @@ class RegisteredUserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages());
         }
+        \Log::info($request);
         $user = Manage::create([
             'dental_name' => openssl_encrypt($request->dentalName, $aes_type, $aes_key),
             'email' => openssl_encrypt($request->email, $aes_type, $aes_key),
@@ -67,13 +68,14 @@ class RegisteredUserController extends Controller
             'last_name_kana' => openssl_encrypt($request->lastNameKana, $aes_type, $aes_key),
             'first_name_kana' => openssl_encrypt($request->firstNameKana, $aes_type, $aes_key),
             'post_number' => openssl_encrypt($request->postNumber, $aes_type, $aes_key),
+            'prefecture_number' => $request->prefectureCode,
             'address1' => openssl_encrypt($request->address1, $aes_type, $aes_key),
             'address2' => openssl_encrypt($request->address2, $aes_type, $aes_key),
             'address3' => openssl_encrypt($request->address3, $aes_type, $aes_key),
             'address4' => openssl_encrypt($request->address4, $aes_type, $aes_key),
             'password' => Hash::make($request->password),
         ]);
-        $closed = BasicInformation::create([
+        BasicInformation::create([
             'manage_id' => $user->id,
             'closed' => config('app.closed_default'),
         ]);
