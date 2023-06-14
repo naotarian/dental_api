@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Models\Manage;
+use App\Models\MedicalParentCategory;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Http\Controllers\CommonController;
@@ -14,24 +15,15 @@ class DentalListController extends Controller
 {
     public function fetch(Request $request)
     {
-        if (!$request->has('number')) {
-            \Log::info($request);
-            $dentals = Manage::withWhereHas('basic_information', function ($query) {
-                $query->whereNotNull('business_start')->whereNotNull('business_end');
-            })->with('selected_station')->get();
-            $regions = Region::with('prefectures')->get();
-            $contents = ['regions' => $regions, 'dentals' => $dentals];
-            return response()->json($contents);
-        } else {
-            //検索処理
-            $prefecture_number = $request['number'];
-            $dentals = Manage::where('prefecture_number', $prefecture_number)->withWhereHas('basic_information', function ($query) {
-                $query->whereNotNull('business_start')->whereNotNull('business_end');
-            })->with('selected_station')->get();
-            $regions = Region::with('prefectures')->get();
-            $contents = ['regions' => $regions, 'dentals' => $dentals];
-            return response()->json($contents);
-        }
+        $dentals = Manage::query();
+        if ($request->has('number')) $dentals = $dentals->where('prefecture_number', $request['number']);
+        $dentals = $dentals->withWhereHas('basic_information', function ($query) {
+            $query->whereNotNull('business_start')->whereNotNull('business_end');
+        })->with('selected_station')->get();
+        $regions = Region::with('prefectures')->get();
+        $categories = MedicalParentCategory::with('children')->get();
+        $contents = ['regions' => $regions, 'dentals' => $dentals, 'categories' => $categories];
+        return response()->json($contents);
     }
 
     public function detail(CommonController $common, Request $request)
