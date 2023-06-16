@@ -32,7 +32,7 @@ class DentalListController extends Controller
         }
         $dentals = $dentals->withWhereHas('basic_information', function ($query) {
             $query->whereNotNull('business_start')->whereNotNull('business_end');
-        })->with('selected_station')->get();
+        })->with('selected_station')->with('medical_treatments')->get();
         $regions = Region::with('prefectures')->get();
         $categories = MedicalParentCategory::with('children')->get();
         $children_categories = MedicalChildrenCategory::all();
