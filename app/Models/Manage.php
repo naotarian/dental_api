@@ -170,4 +170,11 @@ class Manage extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(BasicInformation::class);
     }
+
+    protected $guarded = ['id'];
+
+    public function day_of_weeks()
+    {
+        return $this->belongsToMany(DayOfWeek::class)->withPivot('day_of_week_id')->withTimestamps();
+    }
 }

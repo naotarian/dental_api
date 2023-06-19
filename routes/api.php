@@ -8,6 +8,7 @@ use App\Http\Controllers\Manage\MedicalTreatmentController;
 use App\Http\Controllers\Manage\StaffController;
 use App\Http\Controllers\Manage\ShiftController;
 use App\Http\Controllers\Manage\UnitController;
+use App\Http\Controllers\Manage\SearchController;
 use App\Http\Controllers\Portal\DentalListController;
 use App\Http\Controllers\Portal\ReserveController;
 use App\Http\Controllers\Manage\ReserveController as ManageReserve;
@@ -92,6 +93,14 @@ Route::middleware(['auth:manages', 'verified'])->controller(ManageReserve::class
             Route::post('/detail', 'detail')->name('reserve.detail');
             Route::post('/listSearch', 'listSearch')->name('reserve.listSearch');
             Route::post('/update', 'update')->name('reserve.update');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(SearchController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('search')->group(function () {
+            Route::get('/fetch', 'fetch')->name('search.fetch');
+            Route::post('/update', 'update')->name('search.update');
         });
     });
 });

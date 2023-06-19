@@ -38,10 +38,10 @@ class DentalListController extends Controller
         $today = Carbon::today();
         $end_date = $today->copy()->addWeeks(3);
         $dates = CarbonPeriod::create($today, $end_date)->toArray();
-        foreach($dentals as $key => &$dental) {
+        foreach ($dentals as $key => &$dental) {
             $dental['calendarMin'] = [];
-            foreach($dates as $index => $date) {
-                $dental['calendarMin'][$index]['day'] = $date->format('Y/m/d');
+            foreach ($dates as $index => $date) {
+                $dental['calendarMin'][$index]['day'] = $date->format('Y-m-d');
                 $dental['calendarMin'][$index]['display_day'] = $date->format('n/j');
                 $dental['calendarMin'][$index]['dow_number'] = $date->dayOfWeekIso;
                 $dental['calendarMin'][$index]['dow'] = $date->isoFormat('ddd');
@@ -62,7 +62,15 @@ class DentalListController extends Controller
     {
         $id = $request['id'];
         $dental = Manage::where('id', $id)->with('basic_information')->with('selected_station')->with('treatments')->first();
-        $contents = ['dental' => $dental];
+        //当日
+        $today = Carbon::today();
+        $end_date = $today->copy()->addWeeks(3);
+        $dates = CarbonPeriod::create($today, $end_date)->toArray();
+        $days = [];
+        foreach ($dates as $index => $date) {
+            $days[$date->format('Y-m-d')] = ['day_format' => $date->format('n/j')];
+        }
+        $contents = ['dental' => $dental, 'days' => $days];
         return response()->json($contents);
     }
 }
