@@ -14,7 +14,8 @@ class ReserveController extends Controller
     public function list()
     {
         $manage_id = Auth::id();
-        $reserves = Reserve::where('manage_id', $manage_id)->with('detail')->get();
+        $today = Carbon::today();
+        $reserves = Reserve::where('manage_id', $manage_id)->where('reserve_date', '>=', $today->format('Y-m-d'))->with('detail')->get();
         $contents = ['list' => $reserves];
         return response()->json($contents);
     }
@@ -23,6 +24,12 @@ class ReserveController extends Controller
         $manage_id = Auth::id();
         $reserves = Reserve::query();
         $reserves = $reserves->where('manage_id', $manage_id);
+        if ($request->has('past')) {
+            if (!$request['past']) {
+                $today = Carbon::today();
+                $reserves = $reserves->where('reserve_date', '>=', $today->format('Y-m-d'));
+            }
+        }
         if ($request['todayOnly']) {
             $today = Carbon::today();
             $reserves = $reserves->where('reserve_date', $today->format('Y-m-d'));
@@ -44,12 +51,10 @@ class ReserveController extends Controller
     public function update(Request $request)
     {
         $detail = $request['detail'];
-        \Log::info($detail['gender']);
         $target = ReserveDetail::find($detail['id']);
         $target['examination'] = $detail['examination'];
         $target['remark'] = $detail['remark'];
         $target['gender'] = $detail['gender'];
-        \Log::info($target);
         $target['email'] = $detail['email'];
         $target['mobile_tel'] = $detail['mobile_tel'];
         $target['fixed_tel'] = $detail['fixed_tel'];
