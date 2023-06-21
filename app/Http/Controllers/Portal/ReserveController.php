@@ -78,6 +78,8 @@ class ReserveController extends Controller
             if ($is_holiday && $closed[6]['holiday']['is_closed']) $is_closed = true;
             //休診フラグセット
             $dates_format[$date->format('Y/m/d')]['is_closed'] = $is_closed;
+            $threshold = $common->__threshold($common, $date, $closed, $dental['id']);
+            $dates_format[$date->format('Y/m/d')]['threshold'] = $threshold ? array_sum($threshold) : $threshold;
             //曜日、祝日によって文字色セット
             $dates_format[$date->format('Y/m/d')]['color'] = '#333';
             if ($dow === 6) $dates_format[$date->format('Y/m/d')]['color'] = '#1e90ff';
@@ -90,10 +92,24 @@ class ReserveController extends Controller
         //予約可能な時間帯を配列にする
         $business_start = $dental['basic_information']['business_start'];
         $business_end = $dental['basic_information']['business_end'];
+        // $date_list = $common->__threshold($common, $date, $closed, $dental['id']);
         $date_list = $common->is_reserve_day_list($business_start, $business_end);
 
         $contents = ['dates' => $split_dates, 'display_ym' => $display_ym, 'next_date' => $next_date, 'prev_date' => $prev_date, 'min_date' => $min_date, 'max_date' => $max_date, 'date_list' => $date_list];
         return response()->json($contents);
+    }
+
+    public function day_list(CommonController $common, Request $request)
+    {
+        \Log::info($request);
+        $dental = Manage::where('id', $request['manageId'])->first();
+        $business_start = $dental['basic_information']['business_start'];
+        $business_end = $dental['basic_information']['business_end'];
+        $date_list = $common->is_reserve_day_list($business_start, $business_end);
+        $closed = $dental['basic_information']['closed'];
+        $day = new Carbon($request['reserveDayYmd']);
+        $date_list = $common->__threshold($common, $day, $closed, $request['manageId']);
+        return response()->json($date_list);
     }
 
     public function regist(RegistRequest $request)

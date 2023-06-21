@@ -120,6 +120,7 @@ Route::controller(ReserveController::class)->group(function () {
         Route::prefix('reserve')->group(function () {
             Route::post('/calendar', 'calendar')->name('reserve.calendar');
             Route::post('/regist', 'regist')->name('reserve.regist');
+            Route::post('/day_list', 'day_list')->name('reserve.day_list');
         });
     });
 });

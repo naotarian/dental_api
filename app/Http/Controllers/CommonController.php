@@ -66,6 +66,22 @@ class CommonController extends Controller
         return $unit_count > 0;
     }
 
+    //医院休診情報と日付から該当日の時間別予約閾値を算出
+    public function __threshold($common, $day, $closed, $manage_id)
+    {
+        //該当医院が該当日に診療か休診か取得
+        $is_closed = $common->is_closed($day, $closed);
+        if ($is_closed) return 0;
+        //スタッフ登録がない場合は閾値0をreturn
+        $staff_exists = $common->staff_exists($manage_id);
+        if (!$staff_exists) return 0;
+        //ユニット登録がない場合は閾値0をreturn
+        $unit_exists = $common->unit_exists($manage_id);
+        if (!$unit_exists) return 0;
+        $day_of_threshold = $common->day_of_threshold($manage_id, $day);
+        return $day_of_threshold;
+    }
+
     //医院IDと日付からその日の閾値を算出
     public function day_of_threshold($manage_id, $day)
     {

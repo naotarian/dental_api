@@ -57,7 +57,7 @@ class DentalListController extends Controller
                 $dental['calendarMin'][$index]['dow_number'] = $date->dayOfWeekIso;
                 $dental['calendarMin'][$index]['dow'] = $date->isoFormat('ddd');
                 $dental['calendarMin'][$index]['is_holiday'] = $common->isHoliday($date);
-                $threshold = $this->__threshold($common, $date, $closed, $dental['id']);
+                $threshold = $common->__threshold($common, $date, $closed, $dental['id']);
                 $dental['calendarMin'][$index]['threshold'] = $threshold ? array_sum($threshold) : $threshold;
                 $dental['calendarMin'][$index]['today'] = $key === 0 ? true : false;
             }
@@ -74,6 +74,11 @@ class DentalListController extends Controller
     public function detail(CommonController $common, Request $request)
     {
         $id = $request['id'];
+        $reserve_day = '';
+        if ($request->has('day')) {
+            $reserve_day = new Carbon($request['day']);
+            $reserve_day = $reserve_day->format('Y年m月d日') . '(' . $reserve_day->isoFormat('ddd') . ')';
+        }
         $dental = Manage::where('id', $id)->with('basic_information')->with('selected_station')->with('treatments')->first();
         //当日
         $today = Carbon::today();
@@ -84,23 +89,23 @@ class DentalListController extends Controller
             $days[$date->format('Y-m-d')] = ['day_format' => $date->format('n/j')];
         }
 
-        $contents = ['dental' => $dental, 'days' => $days];
+        $contents = ['dental' => $dental, 'days' => $days, 'reserve_day' => $reserve_day];
         return response()->json($contents);
     }
 
-    //医院休診情報と日付から該当日の時間別予約閾値を算出
-    public function __threshold($common, $day, $closed, $manage_id)
-    {
-        //該当医院が該当日に診療か休診か取得
-        $is_closed = $common->is_closed($day, $closed);
-        if ($is_closed) return 0;
-        //スタッフ登録がない場合は閾値0をreturn
-        $staff_exists = $common->staff_exists($manage_id);
-        if (!$staff_exists) return 0;
-        //ユニット登録がない場合は閾値0をreturn
-        $unit_exists = $common->unit_exists($manage_id);
-        if (!$unit_exists) return 0;
-        $day_of_threshold = $common->day_of_threshold($manage_id, $day);
-        return $day_of_threshold;
-    }
+    // //医院休診情報と日付から該当日の時間別予約閾値を算出
+    // public function __threshold($common, $day, $closed, $manage_id)
+    // {
+    //     //該当医院が該当日に診療か休診か取得
+    //     $is_closed = $common->is_closed($day, $closed);
+    //     if ($is_closed) return 0;
+    //     //スタッフ登録がない場合は閾値0をreturn
+    //     $staff_exists = $common->staff_exists($manage_id);
+    //     if (!$staff_exists) return 0;
+    //     //ユニット登録がない場合は閾値0をreturn
+    //     $unit_exists = $common->unit_exists($manage_id);
+    //     if (!$unit_exists) return 0;
+    //     $day_of_threshold = $common->day_of_threshold($manage_id, $day);
+    //     return $day_of_threshold;
+    // }
 }
