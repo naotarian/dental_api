@@ -101,7 +101,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ReserveCalendarContr
     Route::prefix('manages')->group(function () {
         Route::prefix('reserve_calendar')->group(function () {
             Route::get('/fetch', 'fetch')->name('reserve_calendar.fetch');
-            // Route::post('/update', 'update')->name('search.update');
+            Route::post('/regist', 'regist')->name('reserve_calendar.regist');
         });
     });
 });

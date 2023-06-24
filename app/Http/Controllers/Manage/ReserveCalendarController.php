@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\StaffColor;
 use App\Models\Staff;
 use App\Models\MedicalChildrenCategory;
+use App\Http\Requests\Manage\ReserveCalendar\RegistRequest;
 
 class ReserveCalendarController extends Controller
 {
@@ -26,13 +27,19 @@ class ReserveCalendarController extends Controller
         $reserves = Reserve::where('manage_id', $manage_id)->with('detail')->get();
         foreach ($reserves as $reserve) {
             $reserve['resourceId'] = $reserve['staff_id'];
-            $reserve['start'] = '2023-06-22T14:00:00';
-            $reserve['end'] = '2023-06-22T16:00:00';
+            $reserve['start'] = $reserve['reserve_date'] . 'T' . $reserve['start_time'];
+            $reserve['end'] = $reserve['reserve_date'] . 'T' . $reserve['end_time'];
             $reserve['title'] = MedicalChildrenCategory::where('id', $reserve['detail']['category_id'])->first()['title'];
             array_push($contents['reserves'], $reserve);
         }
         $categories = MedicalChildrenCategory::all();
         $contents['categories'] = $categories;
         return response()->json($contents);
+    }
+
+    public function regist(RegistRequest $request)
+    {
+        \Log::info($request);
+        return response()->noContent();
     }
 }
