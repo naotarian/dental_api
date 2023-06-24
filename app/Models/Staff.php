@@ -80,4 +80,8 @@ class Staff extends Model
     {
         return $this->hasMany(Shift::class);
     }
+    public function reserves()
+    {
+        return $this->hasMany(Reserve::class);
+    }
 }

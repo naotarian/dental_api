@@ -12,6 +12,7 @@ use App\Http\Controllers\Manage\SearchController;
 use App\Http\Controllers\Portal\DentalListController;
 use App\Http\Controllers\Portal\ReserveController;
 use App\Http\Controllers\Manage\ReserveController as ManageReserve;
+use App\Http\Controllers\Manage\ReserveCalendarController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,14 @@ Route::middleware(['auth:manages', 'verified'])->controller(ManageReserve::class
             Route::post('/detail', 'detail')->name('reserve.detail');
             Route::post('/listSearch', 'listSearch')->name('reserve.listSearch');
             Route::post('/update', 'update')->name('reserve.update');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(ReserveCalendarController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('reserve_calendar')->group(function () {
+            Route::get('/fetch', 'fetch')->name('reserve_calendar.fetch');
+            // Route::post('/update', 'update')->name('search.update');
         });
     });
 });
