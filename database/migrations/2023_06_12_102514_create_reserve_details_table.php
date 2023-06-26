@@ -16,15 +16,15 @@ return new class extends Migration
         Schema::create('reserve_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('reserve_id')->comment('予約ID');
-            $table->integer('color_id')->comment('管理カラーID');
+            $table->integer('color_id')->nullable()->default(1)->comment('管理カラーID');
             $table->bigInteger('category_id')->unsigned();
-            $table->string('last_name')->comment('姓');
-            $table->string('first_name')->comment('名');
-            $table->string('full_name')->comment('フルネーム');
-            $table->string('last_name_kana')->comment('姓(フリガナ)');
-            $table->string('first_name_kana')->comment('名(フリガナ)');
-            $table->string('full_name_kana')->comment('フルネーム(フリガナ)');
-            $table->integer('gender')->comment('性別');
+            $table->string('last_name')->nullable()->comment('姓');
+            $table->string('first_name')->nullable()->comment('名');
+            $table->string('full_name')->nullable()->comment('フルネーム');
+            $table->string('last_name_kana')->nullable()->comment('姓(フリガナ)');
+            $table->string('first_name_kana')->nullable()->comment('名(フリガナ)');
+            $table->string('full_name_kana')->nullable()->comment('フルネーム(フリガナ)');
+            $table->integer('gender')->nullable()->comment('性別');
             $table->string('mobile_tel')->nullable()->comment('携帯電話番号');
             $table->string('fixed_tel')->nullable()->comment('固定電話番号');
             $table->string('email')->nullable()->comment('メールアドレス');

@@ -25,5 +25,7 @@ class GuestSeeder extends Seeder
             'email_verified_at' => new DateTime(),
             'password' => Hash::make('aaaaaaaa'),
         ]);
+        $path = 'database/seeders/data/default.sql';
+        \DB::unprepared(file_get_contents($path));
     }
 }
