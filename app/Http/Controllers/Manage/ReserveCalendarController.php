@@ -29,6 +29,7 @@ class ReserveCalendarController extends Controller
         unset($tmp);
         $reserves = Reserve::where('manage_id', $manage_id)->with('detail')->get();
         foreach ($reserves as $reserve) {
+            $reserve['reserveId'] = $reserve['id'];
             $reserve['resourceId'] = $reserve['staff_id'];
             $reserve['start'] = $reserve['reserve_date'] . 'T' . $reserve['start_time'];
             $reserve['end'] = $reserve['reserve_date'] . 'T' . $reserve['end_time'];
@@ -51,35 +52,63 @@ class ReserveCalendarController extends Controller
     {
         $data = $request->all();
         $manage_id = Auth::id();
-        $guest = User::where('is_guest', true)->first();
-        $reserve = new Reserve;
-        $reserve->manage_id = $manage_id;
-        $reserve->staff_id = $data['staff'];
-        $reserve->unit_id = $data['unit'];
-        $reserve->user_id = $guest['id'];
-        $reserve->reserve_date = $data['reserveDay'];
-        $reserve->start_time = $data['reserveStart'];
-        $reserve->end_time = $data['reserveEnd'];
-        $save = $reserve->save();
-        if ($save) {
-            $detail = new ReserveDetail;
-            $detail->reserve_id = $reserve['id'];
-            $detail->color_id = 1;
-            $detail->category_id = $data['category'];
-            $detail->last_name = $data['lastName'];
-            $detail->first_name = $data['firstName'];
-            $detail->full_name = ($data['lastName'] && $data['firstName']) ? $data['lastName'] . $data['firstName'] : null;
-            $detail->last_name_kana = $data['lastNameKana'];
-            $detail->first_name_kana = $data['firstNameKana'];
-            $detail->full_name_kana = ($data['lastNameKana'] && $data['firstNameKana']) ? $data['lastNameKana'] . $data['firstNameKana'] : null;
-            $detail->gender = $data['gender'];
-            $detail->mobile_tel = $data['mobileTel'];
-            $detail->fixed_tel = $data['fixedTel'];
-            $detail->email = $data['email'];
-            $detail->birth = ($data['birthYear'] && $data['birthMonth'] && $data['birthDay']) ? $data['birthYear'] . '-' . $data['birthMonth'] . '-' . $data['birthDay'] : null;
-            $detail->examination = $data['examination'];
-            $detail->remark = $data['remark'];
-            $detail->save();
+        if ($data['id']) {
+            $target = Reserve::where('id', $data['id'])->with('detail')->first();
+            $target['unit_id'] = $data['unit'];
+            $target['staff_id'] = $data['staff'];
+            $target['reserve_date'] = $data['reserveDay'];
+            $target['start_time'] = $data['startTime'];
+            $target['end_time'] = $data['endTime'];
+            $is_save = $target->save();
+            if ($is_save) {
+                $detail = ReserveDetail::where('reserve_id', $data['id'])->first();
+                $detail->category_id = $data['category'];
+                $detail->last_name = $data['lastName'];
+                $detail->first_name = $data['firstName'];
+                $detail->full_name = ($data['lastName'] && $data['firstName']) ? $data['lastName'] . $data['firstName'] : null;
+                $detail->last_name_kana = $data['lastNameKana'];
+                $detail->first_name_kana = $data['firstNameKana'];
+                $detail->full_name_kana = ($data['lastNameKana'] && $data['firstNameKana']) ? $data['lastNameKana'] . $data['firstNameKana'] : null;
+                $detail->gender = $data['gender'];
+                $detail->mobile_tel = $data['mobileTel'];
+                $detail->fixed_tel = $data['fixedTel'];
+                $detail->email = $data['email'];
+                $detail->birth = ($data['birthYear'] && $data['birthMonth'] && $data['birthDay']) ? $data['birthYear'] . '-' . $data['birthMonth'] . '-' . $data['birthDay'] : null;
+                $detail->examination = $data['examination'];
+                $detail->remark = $data['remark'];
+                $detail->save();
+            }
+        } else {
+            $guest = User::where('is_guest', true)->first();
+            $reserve = new Reserve;
+            $reserve->manage_id = $manage_id;
+            $reserve->staff_id = $data['staff'];
+            $reserve->unit_id = $data['unit'];
+            $reserve->user_id = $guest['id'];
+            $reserve->reserve_date = $data['reserveDay'];
+            $reserve->start_time = $data['startTime'];
+            $reserve->end_time = $data['endTime'];
+            $save = $reserve->save();
+            if ($save) {
+                $detail = new ReserveDetail;
+                $detail->reserve_id = $reserve['id'];
+                $detail->color_id = 1;
+                $detail->category_id = $data['category'];
+                $detail->last_name = $data['lastName'];
+                $detail->first_name = $data['firstName'];
+                $detail->full_name = ($data['lastName'] && $data['firstName']) ? $data['lastName'] . $data['firstName'] : null;
+                $detail->last_name_kana = $data['lastNameKana'];
+                $detail->first_name_kana = $data['firstNameKana'];
+                $detail->full_name_kana = ($data['lastNameKana'] && $data['firstNameKana']) ? $data['lastNameKana'] . $data['firstNameKana'] : null;
+                $detail->gender = $data['gender'];
+                $detail->mobile_tel = $data['mobileTel'];
+                $detail->fixed_tel = $data['fixedTel'];
+                $detail->email = $data['email'];
+                $detail->birth = ($data['birthYear'] && $data['birthMonth'] && $data['birthDay']) ? $data['birthYear'] . '-' . $data['birthMonth'] . '-' . $data['birthDay'] : null;
+                $detail->examination = $data['examination'];
+                $detail->remark = $data['remark'];
+                $detail->save();
+            }
         }
         $contents = $this->defaultFetch();
         return response()->json($contents);
