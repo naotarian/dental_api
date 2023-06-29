@@ -13,6 +13,9 @@ use App\Models\ReserveDetail;
 use App\Models\User;
 use App\Models\Staff;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReserveMail;
+use App\Mail\ReserveMailManage;
 //Requests
 use App\Http\Requests\Portal\Reserve\RegistRequest;
 
@@ -101,7 +104,6 @@ class ReserveController extends Controller
 
     public function day_list(CommonController $common, Request $request)
     {
-        \Log::info($request);
         $dental = Manage::where('id', $request['manageId'])->first();
         $business_start = $dental['basic_information']['business_start'];
         $business_end = $dental['basic_information']['business_end'];
@@ -146,6 +148,11 @@ class ReserveController extends Controller
         $reserve_detail['birth'] = $request['year'] . '-' . $request['month'] . '-' . $request['day'];
         $reserve_detail->save();
         //メール処理
+        // $send = $mail($request['email']);
+        // Mail::send(new ReserveMail($request['email']));
+        $dental = Manage::find($request['manageId']);
+        Mail::to($request['email'])->send(new ReserveMail($reserve, $reserve_detail, $dental));
+        Mail::to($dental['email'])->send(new ReserveMailManage($reserve, $reserve_detail));
         return response()->json(['res' => 'ok']);
     }
 }

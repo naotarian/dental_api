@@ -34,7 +34,8 @@ class DashBoradController extends Controller
             $target_month_start = $start_month->copy();
             $target_month_end = $start_month->copy()->endOfMonth();
             $reserve_count = Reserve::where('manage_id', $manage_id)->whereBetween('reserve_date', [$target_month_start, $target_month_end])->count();
-            $tmp_data = ['name' => $start_month->copy()->format('Y-m'), '予約件数' => $reserve_count];
+            $reserve_cancel_count = Reserve::where('manage_id', $manage_id)->whereNotNull('cancel_date')->whereBetween('reserve_date', [$target_month_start, $target_month_end])->count();
+            $tmp_data = ['name' => $start_month->copy()->format('Y-m'), '予約件数' => $reserve_count, 'キャンセル数' => $reserve_cancel_count];
             array_push($chart_data, $tmp_data);
             $start_month->addMonthNoOverflow();
         }
