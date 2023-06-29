@@ -1,16 +1,21 @@
 <?php
 
 namespace App\Http\Service\Manage\BasicInformation;
+
 use App\Models\Manage\BasicInformation;
 use Illuminate\Support\Facades\Auth;
-class Update {
-  public function __invoke($data) {
+
+class Update
+{
+  public function __invoke($data)
+  {
     //ユーザーID取得
     $manage_id = Auth::id();
     //休診情報のレコード取得
     $basic_information = BasicInformation::where('manage_id', $manage_id)->first();
     //レコードなければ作成
     if (!$basic_information) $basic_information = new BasicInformation();
+    \Log::info($data);
     $basic_information['closed'] = $data->closed;
     $tmp = $basic_information['closed'];
     $tmp[6]['holiday'] = $data->holiday;
@@ -24,5 +29,4 @@ class Update {
     $contents = ['is_change' => $is_change];
     return $contents;
   }
-
 }

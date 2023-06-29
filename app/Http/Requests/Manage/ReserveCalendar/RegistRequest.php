@@ -39,8 +39,8 @@ class RegistRequest extends FormRequest
             'gender' => ['nullable'],
             'startTime' => ['required'],
             'endTime' => ['required'],
-            // 'reserveStart' => ['required'],
-            // 'reserveEnd' => ['required'],
+            'unit' => ['required'],
+            'staff' => ['required'],
             'mobileTel' => ['nullable', 'regex:/^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})$/'],
             'fixedTel' => ['nullable', 'regex:/^(0{1}\d{1,4}-{0,1}\d{1,4}-{0,1}\d{4})$/'],
         ];
@@ -64,6 +64,8 @@ class RegistRequest extends FormRequest
             'endTime' => '予約終了時間',
             'mobileTel' => '携帯電話番号',
             'fixedTel' => '固定電話番号',
+            'unit' => 'ユニット',
+            'staff' => '対応スタッフ',
         ];
     }
 
@@ -71,6 +73,8 @@ class RegistRequest extends FormRequest
     {
         return [
             'examination.required' => ':attributeを選択してください。',
+            'unit.required' => ':attributeを選択してください。',
+            'staff.required' => ':attributeを選択してください。',
             'reserveDay.required' => ':attributeを入力してください。',
             'category.required' => ':attributeを選択してください。',
             'startTime.required' => ':attributeを選択してください。',

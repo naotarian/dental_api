@@ -13,6 +13,7 @@ use App\Http\Controllers\Portal\DentalListController;
 use App\Http\Controllers\Portal\ReserveController;
 use App\Http\Controllers\Manage\ReserveController as ManageReserve;
 use App\Http\Controllers\Manage\ReserveCalendarController;
+use App\Http\Controllers\Manage\DashBoradController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
 });
 Route::middleware(['auth:manages', 'verified'])->get('/manages/user', function (Request $request) {
     return $request->user();
+});
+Route::middleware(['auth:manages', 'verified'])->controller(DashBoradController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('dashborad')->group(function () {
+            Route::get('/', 'fetch')->name('dashborad.fetch');
+        });
+    });
 });
 Route::middleware(['auth:manages', 'verified'])->controller(BasicInformationController::class)->group(function () {
     Route::prefix('manages')->group(function () {
@@ -102,6 +110,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ReserveCalendarContr
         Route::prefix('reserve_calendar')->group(function () {
             Route::get('/fetch', 'fetch')->name('reserve_calendar.fetch');
             Route::post('/regist', 'regist')->name('reserve_calendar.regist');
+            Route::post('/drag', 'drag')->name('reserve_calendar.drag');
         });
     });
 });

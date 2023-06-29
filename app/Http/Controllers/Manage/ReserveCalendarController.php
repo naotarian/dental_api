@@ -113,4 +113,18 @@ class ReserveCalendarController extends Controller
         $contents = $this->defaultFetch();
         return response()->json($contents);
     }
+
+    public function drag(Request $request)
+    {
+        $data = $request->all();
+        $target = Reserve::where('id', $request['reserveId'])->first();
+        if ($data['staffId']) $target['staff_id'] = $data['staffId'];
+        $target['reserve_date'] = $data['reserveDay'];
+        $target['start_time'] = $data['startTime'];
+        $target['end_time'] = $data['endTime'];
+        $changed = $target->isDirty();
+        if ($changed) $target->save();
+        $contents = $this->defaultFetch();
+        return response()->json($contents);
+    }
 }
