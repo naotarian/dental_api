@@ -19,9 +19,11 @@ return new class extends Migration
             $table->uuid('user_id')->comment('ユーザーID');
             $table->uuid('staff_id')->comment('スタッフID');
             $table->uuid('unit_id')->comment('ユニットID');
+            $table->integer('patient_id')->nullable()->comment('患者テーブルID');
             $table->date('reserve_date')->comment('予約日');
             $table->time('start_time')->comment('予約開始時間');
             $table->time('end_time')->comment('予約終了時間');
+            $table->string('patient_registration')->nullable()->default(null)->comment('診察番号');
             $table->dateTime('cancel_date')->nullable()->comment('予約キャンセル日時');
             $table->timestamps();
             $table->softDeletes();

@@ -14,6 +14,7 @@ use App\Http\Controllers\Portal\ReserveController;
 use App\Http\Controllers\Manage\ReserveController as ManageReserve;
 use App\Http\Controllers\Manage\ReserveCalendarController;
 use App\Http\Controllers\Manage\DashBoradController;
+use App\Http\Controllers\Manage\PatientController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +112,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(ReserveCalendarContr
             Route::get('/fetch', 'fetch')->name('reserve_calendar.fetch');
             Route::post('/regist', 'regist')->name('reserve_calendar.regist');
             Route::post('/drag', 'drag')->name('reserve_calendar.drag');
+            Route::post('/search_patient', 'search_patient')->name('reserve_calendar.search_patient');
         });
     });
 });
@@ -119,6 +121,15 @@ Route::middleware(['auth:manages', 'verified'])->controller(SearchController::cl
         Route::prefix('search')->group(function () {
             Route::get('/fetch', 'fetch')->name('search.fetch');
             Route::post('/update', 'update')->name('search.update');
+        });
+    });
+});
+Route::middleware(['auth:manages', 'verified'])->controller(PatientController::class)->group(function () {
+    Route::prefix('manages')->group(function () {
+        Route::prefix('patient')->group(function () {
+            Route::get('/', 'fetch')->name('patient.fetch');
+            Route::post('/detail', 'detail')->name('patient.detail');
+            Route::post('/update', 'update')->name('patient.update');
         });
     });
 });

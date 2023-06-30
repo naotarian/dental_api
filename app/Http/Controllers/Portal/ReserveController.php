@@ -13,6 +13,7 @@ use App\Models\ReserveDetail;
 use App\Models\User;
 use App\Models\Staff;
 use App\Models\Unit;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReserveMail;
 use App\Mail\ReserveMailManage;
@@ -129,6 +130,9 @@ class ReserveController extends Controller
         $reserve['start_time'] = $request['reserveTime'];
         $reserve['end_time'] = $request['reserveTime'];
         $reserve->save();
+        $year = $request['year'];
+        $month = $request['month'] ? sprintf('%02d', $request['month']) : null;
+        $day = $request['day'] ? sprintf('%02d', $request['day']) : null;
         $reserve_detail = new ReserveDetail;
         $reserve_detail['reserve_id'] = $reserve['id'];
         $reserve_detail['color_id'] = 1;
@@ -145,8 +149,19 @@ class ReserveController extends Controller
         $reserve_detail['fixed_tel'] = $request['fixed'];
         $reserve_detail['remark'] = $request['remark'];
         $reserve_detail['examination'] = $request['examination'] === 'new' ? 1 : 2;
-        $reserve_detail['birth'] = $request['year'] . '-' . $request['month'] . '-' . $request['day'];
+        $reserve_detail['birth'] = $year . '-' . $month . '-' . $day;
         $reserve_detail->save();
+        $patient = new Patient;
+        $patient['manage_id'] = $request['manageId'];
+        $patient['last_name'] = $request['lastName'];
+        $patient['first_name'] = $request['firstName'];
+        $patient['last_name_kana'] = $request['lastNameKana'];
+        $patient['first_name_kana'] = $request['firstNameKana'];
+        $patient['gender'] = $request['sex'] === 'women' ? 1 : 2;
+        $patient['mobile_tel'] = $request['mobile'];
+        $patient['fixed_tel'] = $request['fixed'];
+        $patient['birth'] = $year . '-' . $month . '-' . $day;
+        $patient->save();
         //メール処理
         // $send = $mail($request['email']);
         // Mail::send(new ReserveMail($request['email']));

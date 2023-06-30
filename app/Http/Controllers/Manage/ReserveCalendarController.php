@@ -33,7 +33,9 @@ class ReserveCalendarController extends Controller
             $reserve['resourceId'] = $reserve['staff_id'];
             $reserve['start'] = $reserve['reserve_date'] . 'T' . $reserve['start_time'];
             $reserve['end'] = $reserve['reserve_date'] . 'T' . $reserve['end_time'];
-            $reserve['title'] = MedicalChildrenCategory::where('id', $reserve['detail']['category_id'])->first()['title'];
+            $category_name = MedicalChildrenCategory::where('id', $reserve['detail']['category_id'])->first()['title'];
+            $examination = $reserve['detail']['examination'] == '1' ? '初診' : '2回目以降';
+            $reserve['title'] = "{$category_name}、 {$examination}";
             array_push($contents['reserves'], $reserve);
         }
         $categories = MedicalChildrenCategory::all();
@@ -59,6 +61,7 @@ class ReserveCalendarController extends Controller
             $target['reserve_date'] = $data['reserveDay'];
             $target['start_time'] = $data['startTime'];
             $target['end_time'] = $data['endTime'];
+            $target['patient_registration'] = $data['patientRegistration'];
             $is_save = $target->save();
             if ($is_save) {
                 $detail = ReserveDetail::where('reserve_id', $data['id'])->first();
@@ -126,5 +129,17 @@ class ReserveCalendarController extends Controller
         if ($changed) $target->save();
         $contents = $this->defaultFetch();
         return response()->json($contents);
+    }
+
+    public function search_patient(Request $request)
+    {
+        $reserve = Reserve::query();
+        if ($request->has('patientNumber')) {
+            if ($request['patientNumber']) {
+                $reserve = $reserve->where('patient_registration', $request['patientNumber']);
+            }
+        }
+        $patient = $reserve->with('detail')->get();
+        return response()->json($patient);
     }
 }

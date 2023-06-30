@@ -15,7 +15,6 @@ class Update
     $basic_information = BasicInformation::where('manage_id', $manage_id)->first();
     //レコードなければ作成
     if (!$basic_information) $basic_information = new BasicInformation();
-    \Log::info($data);
     $basic_information['closed'] = $data->closed;
     $tmp = $basic_information['closed'];
     $tmp[6]['holiday'] = $data->holiday;
