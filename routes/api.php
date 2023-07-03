@@ -130,6 +130,7 @@ Route::middleware(['auth:manages', 'verified'])->controller(PatientController::c
             Route::get('/', 'fetch')->name('patient.fetch');
             Route::post('/detail', 'detail')->name('patient.detail');
             Route::post('/update', 'update')->name('patient.update');
+            Route::post('/regist', 'regist')->name('patient.regist');
         });
     });
 });

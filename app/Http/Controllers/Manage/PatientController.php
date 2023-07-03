@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Manage\Patient\RegistRequest;
 
 class PatientController extends Controller
 {
@@ -51,6 +52,27 @@ class PatientController extends Controller
         $target['fixed_tel'] = $data['fixed_tel'];
         $target['email'] = $data['email'];
         $target['remark'] = $data['remark'];
+        $target->save();
+        return response()->noContent();
+    }
+
+    public function regist(RegistRequest $request)
+    {
+        $manage_id = Auth::id();
+        $data = $request;
+        $target = new Patient;
+        $target->manage_id = $manage_id;
+        $target->patient_number = $data['patientNumber'];
+        $target->last_name = $data['lastName'];
+        $target->first_name = $data['firstName'];
+        $target->last_name_kana = $data['lastNameKana'];
+        $target->first_name_kana = $data['firstNameKana'];
+        $target->gender = $data['gender'];
+        $target->mobile_tel = $data['mobileTel'];
+        $target->fixed_tel = $data['fixedTel'];
+        $target->email = $data['email'];
+        $target->remark = $data['remark'];
+        $target->birth = ($data['birthYear'] && $data['birthMonth'] && $data['birthDay']) ? "{$data['birthYear']}-{$data['birthMonth']}-{$data['birthDay']}" : null;
         $target->save();
         return response()->noContent();
     }

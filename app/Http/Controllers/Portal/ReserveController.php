@@ -162,6 +162,8 @@ class ReserveController extends Controller
         $patient['fixed_tel'] = $request['fixed'];
         $patient['birth'] = $year . '-' . $month . '-' . $day;
         $patient->save();
+        $reserve->patient_id = $patient->id;
+        $reserve->save();
         //メール処理
         // $send = $mail($request['email']);
         // Mail::send(new ReserveMail($request['email']));

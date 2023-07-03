@@ -76,4 +76,9 @@ class Patient extends Model
     {
         return empty($value) ? null : openssl_decrypt($value, config('app.aes_type'), config('app.aes_key'));
     }
+
+    public function staff()
+    {
+        return $this->hasMany(Staff::class);
+    }
 }
